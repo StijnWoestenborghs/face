@@ -1,11 +1,12 @@
 // Model.jsx
 import React, { useRef, useState } from "react";
-import { useGLTF } from "@react-three/drei";
-import { useFrame } from "@react-three/fiber";
+import { useGLTF, PerspectiveCamera } from "@react-three/drei";
+import { useFrame, useThree } from "@react-three/fiber";
 import * as THREE from 'three';
 
 export function Model() {
   const { scene } = useGLTF("/models/45.glb");
+  const { camera } = useThree();
   const spineRef = useRef();
   const headRef = useRef();
   const leftArmRef = useRef();
@@ -59,7 +60,7 @@ export function Model() {
   // Apply animations
   useFrame((state) => {
     const time = state.clock.getElapsedTime();
-    
+
     // Calculate target direction based on mouse position
     const targetDirection = new THREE.Vector3(mousePosition.x, mousePosition.y, 0);
     targetDirection.normalize();
@@ -84,16 +85,6 @@ export function Model() {
       headRef.current.rotation.z = mousePosition.x * maxHeadRotation * 0.2;
     }
 
-    // Arms down position
-    if (leftArmRef.current) {
-      leftArmRef.current.rotation.x = 0;
-      leftArmRef.current.rotation.z = 0;
-    }
-    if (rightArmRef.current) {
-      rightArmRef.current.rotation.x = 0;
-      rightArmRef.current.rotation.z = 0;
-    }
-
     // Eyes following mouse
     if (leftEyeRef.current && rightEyeRef.current) {
       const eyeMaxRotation = Math.PI / 8;
@@ -114,5 +105,17 @@ export function Model() {
     }
   });
 
-  return <primitive object={scene} />;
+  return (
+    <>
+      <PerspectiveCamera
+        makeDefault
+        position={new THREE.Vector3(-0.1119957372536149, 0.7, 1.8)}
+        fov={30}
+        near={0.1}
+        far={1000}
+        rotation={new THREE.Euler(0.08189374639765687, 0.080582541329128964, -0.004969370274470226)}
+      />
+      <primitive object={scene} scale={1.2} position={[0, -2, 0]} />
+    </>
+  );
 }
