@@ -16,10 +16,10 @@ export const Model = forwardRef(function Model(props, ref) {
       scene.traverse((object) => {
         if (object.isBone) {
           console.log('Found bone:', object.name);
-          if (object.name === "DEF-neck") {
+          if (object.name === "DEF-head") {
             defNeckRef.current = object;
             console.log('Found DEF-neck bone');
-          } else if (object.name === "ORG-neck") {
+          } else if (object.name === "ORG-head") {
             orgNeckRef.current = object;
             console.log('Found ORG-neck bone');
           }
@@ -39,7 +39,7 @@ export const Model = forwardRef(function Model(props, ref) {
       return;
     }
 
-    const offset = Math.PI / 4; // offset should depend on position of the model in the screen
+    const offset = 0; // offset should depend on position of the model in the screen
     
     // Simple direct rotation based on mouse position
     const maxRotation = Math.PI / 4;
